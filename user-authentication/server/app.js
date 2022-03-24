@@ -21,7 +21,8 @@ db.connect((error)=>{
 });
 
 app.get("/",(req, res)=>{
-    res.send("<h1>Home Page</h1>")
+    //res.send("<h1>Home Page</h1>")
+    res.render("./src/App.js")
 });
 
 app.listen(4000, ()=>{

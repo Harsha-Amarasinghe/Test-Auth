@@ -10,10 +10,10 @@ const DashboardMain = () => {
       title="Doc-Tracker"
       subTitle="This is the Dashboard"
       extra={[
-        <Button key="3">Operation</Button>,
-        <Button key="2">Operation</Button>,
+        <Button key="3">Home</Button>,
+        <Button key="2">Admin Login</Button>,
         <Button key="1" type="primary">
-          Primary
+            Admin Register 
         </Button>,
       ]}
     >
