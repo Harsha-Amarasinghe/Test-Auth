@@ -5,12 +5,13 @@ import { Button } from 'antd';
 import AdminLogin from './components/AdminLogin';
 import AdminRegistration from './components/AdminRegistration';
 import DashboardMain from './components/Dashboard/DashboardMain';
+import Axios from 'axios';
 
 function App() {
   return (
     <div className="App">
-      <DashboardMain />
-      
+      <AdminRegistration />
+      <AdminLogin />
     </div>
   );
 }

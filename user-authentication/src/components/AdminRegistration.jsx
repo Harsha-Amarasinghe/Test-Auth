@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Form, Input, Select, Row, Col, Checkbox, Button, Card } from "antd";
+import Axios from 'axios';
 
 const { Option } = Select;
 
@@ -21,6 +22,21 @@ const formItemLayout = {
   };
 
 const AdminRegistration = () => {
+
+  const[usernameReg, setUsernameReg]=useState('');
+  const[passwordReg, setPasswordReg]=useState('');
+  const[User_IDReg,setUser_IDReg]=useState('');
+
+  const register=()=>{
+    Axios.post('http://localhost:4000/register', {
+      User_ID: User_IDReg,  
+    username: usernameReg,
+      password: passwordReg
+    }).then((response)=>{
+      console.log(response);
+    });
+  };
+
     const [form] = Form.useForm();
     const onFinish = (values) => {
       console.log("Received values of form: ", values);
@@ -47,6 +63,27 @@ const AdminRegistration = () => {
               >
   
                 <b>Enter Details</b>
+
+                <Form.Item
+                  name="User_ID"
+                  label="User_ID"
+                  tooltip="This is used in Logging to the Application."
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input the User_ID!",
+                      whitespace: true,
+                    },
+                  ]}
+                >
+                  <Input 
+                    type='text'
+                    placeholder="User_ID"
+                    onChange={(e)=>{
+                      setUser_IDReg(e.target.value);
+                    }}
+                  />
+                </Form.Item>
   
                 <Form.Item
                   name="username"
@@ -60,7 +97,13 @@ const AdminRegistration = () => {
                     },
                   ]}
                 >
-                  <Input />
+                  <Input 
+                    type='text'
+                    placeholder="username"
+                    onChange={(e)=>{
+                      setUsernameReg(e.target.value);
+                    }}
+                  />
                 </Form.Item>
   
                 <Form.Item
@@ -74,7 +117,12 @@ const AdminRegistration = () => {
                   ]}
                   hasFeedback
                 >
-                  <Input.Password />
+                  <Input.Password 
+                    type='password'
+                    onChange={(e)=>{
+                      setPasswordReg(e.target.value);
+                    }}
+                  />
                 </Form.Item>
   
                 <Form.Item
@@ -130,7 +178,7 @@ const AdminRegistration = () => {
                   </Form.Item>
   
                   <Form.Item {...tailFormItemLayout}>
-                    <Button type="primary" htmlType="submit">
+                    <Button onClick={register} type="primary" htmlType="submit">
                       Register
                     </Button>
                   </Form.Item>
