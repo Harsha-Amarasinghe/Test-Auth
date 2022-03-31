@@ -3,6 +3,9 @@ const mysql=require("mysql2");
 const dotenv=require("dotenv");
 const cors=require("cors");
 const { message } = require("antd");
+const bcrypt= require('bcrypt');
+const { hash } = require("bcrypt");
+const saltRounds=10;
 
 //const App=require('../src/App')
 
@@ -35,12 +38,19 @@ app.post("/register",(req, res)=>{
     const password=req.body.password
     const User_ID=req.body.User_ID
 
-    db.query(
-        "INSERT INTO usersnew (user_id,username, password) values (?,?,?)",
-        [User_ID,username,password],
-        (err,result)=>{
-        console.log(err);
-    });
+    bcrypt.hash(password,saltRounds,(err, hash)=>{
+        if (err)
+            console.log(err);
+
+        db.query(
+            "INSERT INTO usersnew (user_id,username, password) values (?,?,?)",
+            [User_ID,username,hash],
+            (err,result)=>{
+            console.log(err);
+        });
+    })
+
+    
 });
 
 app.post("/login", (req,res)=>{
@@ -49,18 +59,30 @@ app.post("/login", (req,res)=>{
     const User_ID=req.body.User_ID
 
     db.query(
-        "SELECT * FROM usersnew WHERE user_id=? AND password=?",
-        [User_ID, password],
+        "SELECT * FROM usersnew WHERE user_id=?;",
+        [User_ID],
         (err,result)=>{
-            if(err){
+            if(err)
                 res.send({err:err});
+            
+            if(result.length>0) {
+                
+                //res.send(result);
+                bcrypt.compare(password, result[0].password, (error, response)=>{
+                    if(response)
+                        res.send(result)
+                    else
+                        res.send({message: "Wrong username/password combination!"});
+                });
             }
-            if(result.length>0){
-                res.send(result);
-            }
-            else{
-                res.send({message: "Wrong username/password combination!"});
-            }
+
+        
+            else
+                res.send({message: "User doesn't exist"});
+         
+    
+        
+
     });
 });
 
